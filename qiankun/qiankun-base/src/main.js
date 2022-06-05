@@ -17,10 +17,7 @@ registerMicroApps([
   },
   {
     name: 'reactApp',
-    // 子应用端口与主应用不一致
     entry: '//localhost:3000',
-    // 下面这种方式不行
-    // entry: '//localhost:7100/main.js',
     container: '#react',
     activeRule: '/react'
   }

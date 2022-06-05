@@ -4,9 +4,13 @@
     <br>
     <router-link to="/">首页</router-link>
     <br>
-    <router-link to="/vue">vue应用</router-link>
+    <router-link to="/test">/test路由</router-link>
     <br>
-    <router-link to="/react">react应用</router-link>
+    <router-link to="/about">/about路由</router-link>
+    <br>
+    <router-link to="/vue">vue子应用</router-link>
+    <br>
+    <router-link to="/react">react子应用</router-link>
     <div id="vue"></div>
     <div id="react"></div>
   </div>
