@@ -4,7 +4,7 @@ import {reroute} from '../navigations/reroute'
 /**
  * 注册application
  * @param {string} appName application名称
- * @param {Object|Function<Promise>} applicationOrLoadFunction app配置或app异步加载函数
+ * @param {Object|Function<Promise>} loadApp app异步加载函数
  * @param {Function<Boolean>} activeWhen 判断是否应该被挂载
  * @param {Object} customProps 自定义配置
  * @return {Promise}
