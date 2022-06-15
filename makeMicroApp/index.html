@@ -8,32 +8,43 @@
 </head>
 <body>
     <h3>微前端首页</h3>
+    <a href="#/app1">app1</a>
+    <a href="#/app2">app2</a>
+    <!-- <a onclick="a()">app1</a> -->
+    <!-- <a onclick="b()">app2</a> -->
+
     <script src="./lib/umd/single-spa.js"></script>
     <script>
+        function a() {
+            history.pushState({}, '', '/a');
+        }
+        function b() {
+            history.pushState({}, '', '/b');
+        }
         singleSpa.registerApplication(
             'app1',
             async (props) => {
-                console.log('加载时');
+                console.log('app1加载时');
                 return {
-                    bootstrap: [
-                        async (props) => {
-                            console.log('bootstrap1: ');
-                        },
-                        async (props) => {
-                            console.log('bootstrap2: ');
-                        },
-                        async (props) => {
-                            console.log('bootstrap3: ');
-                        },
-                    ],
-                    // bootstrap: async (props) => {
-                    //     console.log('bootstrap: ');
-                    // },
+                    // bootstrap: [
+                    //     async (props) => {
+                    //         console.log('bootstrap1: ');
+                    //     },
+                    //     async (props) => {
+                    //         console.log('bootstrap2: ');
+                    //     },
+                    //     async (props) => {
+                    //         console.log('bootstrap3: ');
+                    //     },
+                    // ],
+                    bootstrap: async (props) => {
+                        console.log('bootstrap 1: ');
+                    },
                     mount: async (props) => {
-                        console.log('mount: ');
+                        console.log('mount 1: ');
                     },
                     unmount: async (props) => {
-                        console.log('unmount: ');
+                        console.log('unmount 1: ');
                     },
                 }
             },
@@ -43,7 +54,7 @@
         singleSpa.registerApplication(
             'app2',
             async (props) => {
-                console.log('加载时2');
+                console.log('app2加载时');
                 return {
                     bootstrap: async (props) => {
                             console.log('bootstrap2: ');
@@ -60,6 +71,9 @@
             {store: {name: 'zf', age: 10}}
         )
         singleSpa.start();
+        // window.addEventListener('hashchange', () => {
+        //     console.log('hashchange: ', hashchange);
+        // });
 
     </script>
 </body>

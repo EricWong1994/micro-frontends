@@ -1,5 +1,13 @@
-import { NOT_LOADED, shouldBeActive, LOAD_RESOURCE_CODE, NOT_BOOTSTRAPPED, BOOTSTRAPPING, NOT_MOUNTED } from './app.helper';
-import {reroute} from '../navigations/reroute'
+import {
+	NOT_LOADED,
+	shouldBeActive,
+	LOAD_RESOURCE_CODE,
+	NOT_BOOTSTRAPPED,
+	BOOTSTRAPPING,
+	NOT_MOUNTED,
+	MOUNTED,
+} from './app.helper';
+import { reroute } from '../navigations/reroute';
 
 /**
  * 注册application
@@ -12,46 +20,46 @@ import {reroute} from '../navigations/reroute'
 
 const apps = [];
 export function registerApplication(appName, loadApp, activeWhen, customProps) {
-    apps.push({
-        name: appName,
-        loadApp,
-        activeWhen,
-        customProps,
-        status: NOT_LOADED
-    });
-    reroute();
+	apps.push({
+		name: appName,
+		loadApp,
+		activeWhen,
+		customProps,
+		status: NOT_LOADED,
+	});
+	reroute();
 }
 
 export function getAppChanges() {
-    const appsToLoad = []; // 要加载的app
-    const appsToMount = []; // 要挂载的app
-    const appsToUnmount = []; // 要卸载的app
-    apps.forEach(app => {
-        const appShouldBeActive = shouldBeActive(app);
-        switch (app.status) {
-            case NOT_LOADED:
-            case LOAD_RESOURCE_CODE:
-                if (appShouldBeActive) {
-                    appsToLoad.push(app);
-                }
-                break;
-            case NOT_BOOTSTRAPPED:
-            case BOOTSTRAPPING:
-            case NOT_MOUNTED:
-                if (appShouldBeActive) {
-                    appsToMount.push(app)
-                }
-                break;
-            case MOUNTED:
-                if (!appShouldBeActive) {
-                    appsToMount.push(app)
-                }
-                break;
-        }
-    })
-    return {
-        appsToLoad,
-        appsToMount,
-        appsToUnmount
-    }
+	const appsToLoad = []; // 要加载的app
+	const appsToMount = []; // 要挂载的app
+	const appsToUnmount = []; // 要卸载的app
+	apps.forEach(app => {
+		const appShouldBeActive = shouldBeActive(app);
+		switch (app.status) {
+			case NOT_LOADED:
+			case LOAD_RESOURCE_CODE:
+				if (appShouldBeActive) {
+					appsToLoad.push(app);
+				}
+				break;
+			case NOT_BOOTSTRAPPED:
+			case BOOTSTRAPPING:
+			case NOT_MOUNTED:
+				if (appShouldBeActive) {
+					appsToMount.push(app);
+				}
+				break;
+			case MOUNTED:
+				if (!appShouldBeActive) {
+					appsToUnmount.push(app);
+				}
+				break;
+		}
+	});
+	return {
+		appsToLoad,
+		appsToMount,
+		appsToUnmount,
+	};
 }
