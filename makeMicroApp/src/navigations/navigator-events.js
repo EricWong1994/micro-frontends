@@ -1,7 +1,7 @@
 export const routingEventsListeningTo = ['hashchange', 'popstate'];
 import { reroute } from './reroute';
 
-function urlReroute() {
+function urlReroute(e) {
 	reroute([], arguments);
 }
 
@@ -39,22 +39,23 @@ window.removeEventListener = function (eventName, fn) {
 	return originalRemoveEventListener.apply(this, arguments);
 };
 
-// function patchedUpdateState(updateState, methodName) {
-// 	return function () {
-// 		const urlBefore = window.location.href;
-// 		updateState.apply(this, arguments);
-// 		const urlAfter = window.location.href;
-// 		if (urlBefore !== urlAfter) {
-// 			urlReroute(new PopStateEvent('popstate'));
-// 		}
-// 	};
-// }
-
-// window.history.pushState = patchedUpdateState(
-// 	window.history.pushState,
-// 	'pushState'
-// );
-// window.history.replaceState = patchedUpdateState(
-// 	window.history.replaceState,
-// 	'replaceState'
-// );
+// window.history如果执行 pushState(repalceState) 方法，是不会触发 popstate 事件的，而 single-spa 通过一种巧妙的方式，实现了执行 pushState(replaceState) 方法可触发 popstate 事件
+function patchedUpdateState(updateState, methodName) {
+	return function () {
+		const urlBefore = window.location.href;
+		updateState.apply(this, arguments);
+		const urlAfter = window.location.href;
+		if (urlBefore !== urlAfter) {
+			urlReroute(new PopStateEvent('popstate'));
+		}
+	};
+}
+// 重写 updateState、replaceState 方法，通过 window.dispatchEvent 方法，手动触发 popstate 事件
+window.history.pushState = patchedUpdateState(
+	window.history.pushState,
+	'pushState'
+);
+window.history.replaceState = patchedUpdateState(
+	window.history.replaceState,
+	'replaceState'
+);

@@ -5,16 +5,40 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <style>
+        .box {
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
-    <h3>微前端首页</h3>
-    <a href="#/app1">app1</a>
-    <a href="#/app2">app2</a>
-    <!-- <a onclick="a()">app1</a> -->
-    <!-- <a onclick="b()">app2</a> -->
+    <div class="box">
+        <h3>微前端首页</h3>
+        <div id="hash-box">
+            <a href="#/app1">app1 哈希跳转</a>
+            <br>
+            <a href="#/app2">app2 哈希跳转</a>
+        </div>
+        <div id="history-box">
+            <div>
+                <a onclick="a()">app1 history跳转</a>
+            </div>
+            <div>
+                <a onclick="b()">app2 history跳转</a>
+            </div>
+        </div>
+    </div>
 
     <script src="./lib/umd/single-spa.js"></script>
     <script>
+        // var isHash = true;
+        var isHash = false;
+        if (isHash) {
+            document.getElementById('history-box').style.display = 'none'
+        } else {
+            document.getElementById('hash-box').style.display = 'none'
+        }
+
         function a() {
             history.pushState({}, '', '/a');
         }
@@ -48,7 +72,9 @@
                     },
                 }
             },
-            location => location.hash.startsWith('#/app1'),
+            // location => location.hash.startsWith('#/app1'),
+            // location => location.pathname.startsWith('/a'),
+            location => isHash ? location.hash.startsWith('#/app1') : location.pathname.startsWith('/a'),
             {store: {name: 'zf', age: 10}}
         )
         singleSpa.registerApplication(
@@ -67,12 +93,18 @@
                     },
                 }
             },
-            location => location.hash.startsWith('#/app2'),
+            // location => location.hash.startsWith('#/app2'),
+            // location => location.pathname.startsWith('/b'),
+            location => isHash ? location.hash.startsWith('#/app2') : location.pathname.startsWith('/b'),
+
             {store: {name: 'zf', age: 10}}
         )
         singleSpa.start();
         // window.addEventListener('hashchange', () => {
-        //     console.log('hashchange: ', hashchange);
+        //     console.log('hashchange hashchange: ', hashchange);
+        // });
+        // window.addEventListener('popstate', () => {
+        //     console.log('popstate popstate: ', popstate);
         // });
 
     </script>
